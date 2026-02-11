@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participantes</title>
+    <link rel="shortcut icon" href="../assets/3.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            padding-top: 80px;
+        }
+
+        .filter-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-export {
+            background: linear-gradient(45deg, #3d7517, #3d7517);
+            color: white;
+            border: none;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+
+
+        .btn-voltar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-voltar:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-50%) scale(1.05);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-voltar .material-icons {
+            font-size: 24px;
+        }
+
+        /* Fixar o cabeçalho da tabela */
+        .dataTables_wrapper .dataTables_scroll div.dataTables_scrollHead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #fff;
+        }
+
+        /* Ajustar a área de rolagem para mostrar apenas o corpo da tabela */
+        .dataTables_wrapper .dataTables_scroll {
+            max-height: 400px;
+            /* Ajuste conforme necessário */
+        }
+
+        .dataTables_wrapper .dataTables_scrollBody {
+            max-height: 350px;
+            /* Altura máxima para o corpo da tabela */
+            overflow-y: auto;
+        }
+
+        /* Garantir que os controles de pesquisa fiquem fora da área de rolagem */
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            position: relative;
+            z-index: 20;
+            background-color: #fff;
+            padding: 5px 0;
+        }
+
+        /* Ajustar o espaçamento entre os controles e a tabela */
+        .dataTables_wrapper .dataTables_filter {
+            margin-bottom: 10px;
+        }
+
+        /* Garantir que o título da tabela fique fixo */
+        .container h3 {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 30;
+            padding: 10px 0;
+            margin-bottom: 15px;
+        }
+
+
+        .table-responsive {
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            /* Espaço adicional na parte inferior */
+        }
+
+        /* Garante que o cabeçalho e o corpo da tabela tenham a mesma largura */
+        #participantesTable thead th,
+        #participantesTable tbody td {
+            white-space: nowrap;
+            min-width: 100px;
+        }
+
+        /* Melhora a aparência da tabela com rolagem */
+        #participantesTable {
+            width: 100% !important;
+            margin-bottom: 0;
+        }
+
+        .table-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            /* Importante para manter os cantos arredondados */
+        }
+
+        .chart-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.4rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- CABEÇALHO -->
+    <div class="header">
+        <!-- <a href="gestao.html" class="btn-voltar">
+            <i class="material-icons">arrow_back</i>
+        </a> -->
+        <h2 class="header-title">PARTICIPANTES INSCRITOS</h2>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="container mt-5">
+        <!-- Cabeçalho Título + Download Excel -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h3>Lista de Inscritos - Treinamento 2026</h3>
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-export mr-2">
+                    <i class="material-icons align-middle">file_download</i> Exportar Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Gráfico de Faixas Etárias -->
+        <div class="chart-card">
+            <h4 class="chart-title">📊 Faixa Etária</h4>
+            <div class="chart-container">
+                <canvas id="faixaEtariaChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filter-card">
+            <form id="filterForm" class="row">
+                <!-- Seção de filtros removida - botão "Atualizar Lista" removido -->
+            </form>
+        </div>
+
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-striped" id="participantesTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Idade</th>
+                            <th>Celular</th>
+                            <th>Ministério?</th>
+                            <th>Salinha</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participantesList">
+                        <!-- Os dados serão carregados dinamicamente do Firebase -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rodapé -->
+        <div class="row mt-3 mb-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body py-2">
+                        <strong>Total de participantes:</strong> <span id="contador-participantes">0</span>
+                        <span id="texto-filtro" class="ml-2 text-muted font-italic" style="display: none;">(filtrados de
+                            <span id="total-participantes">0</span>)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Detalhes-->
+        <div class="modal fade" id="participanteModal" tabindex="-1" role="dialog"
+            aria-labelledby="participanteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <!-- Cabeçalho -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="participanteModalLabel">Dados da Criança</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Dados -->
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Informações Pessoais</h6>
+                                <hr>
+                                <p><strong>Nome:</strong> <span id="modalNome"></span></p>
+                                <p><strong>Idade:</strong> <span id="modalIdade"></span></p>
+                                <p><strong>Celular:</strong> <span id="modalCelularResp"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Dados do Ministério</h6>
+                                <hr>
+                                <p><strong>Faz parte do ministério?</strong> <span id="modalFazParte"></span></p>
+                                <p><strong>Qual Salinha?</strong> <span id="modalSalinha"></span></p>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h6>Informações do Evento</h6>
+                                <hr>
+                                <p><strong>Data de Registro:</strong> <span id="modalDtRegistro"></span></p>
+                                <p><strong>Ano do Evento:</strong> <span id="modalAnoEvento"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Botões -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger mr-auto" id="btnExcluirParticipante">
+                            <i class="material-icons align-middle">delete</i> Excluir Participante
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="../firebase/firebaseConfig.js"></script>
+
+    <script>
+
+        // Inicialização do DataTable
+        let dataTable;
+        let totalParticipantes = 0;
+        let faixaEtariaChart;
+
+        //Modal e gestão do doc
+        $(document).ready(function () {
+            // Carregar participantes do Firebase
+            carregarParticipantes();
+
+            // Inicializar DataTable
+            dataTable = $('#participantesTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json'
+                },
+                responsive: false, // Desativa responsive para permitir rolagem horizontal correta
+                dom: 'Bfrti', // Removido 'p' (paginação)
+                paging: false, // Desativa a paginação
+                scrollY: '350px', // Altura fixa para a área de rolagem
+                scrollX: true, // Ativa rolagem horizontal
+                scrollCollapse: true, // Mantém o colapso da altura
+                fixedHeader: false, // Desativa o cabeçalho fixo para permitir rolagem horizontal
+                columnDefs: [
+                    // Removido configuração da coluna "Data Preenchimento"
+                ],
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: 'Exportar Excel',
+                        className: 'btn btn-export d-none',
+                        title: 'Lista de Participantes - Treinamento Ministério Infantil 2026',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4], // Colunas visíveis para exportação
+                        },
+                        customize: function (xlsx) {
+                            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                            
+                            // Personalizar cabeçalhos
+                            var headerRow = sheet.getElementsByTagName('row')[0];
+                            var cells = headerRow.getElementsByTagName('c');
+                            
+                            // Definir novos cabeçalhos para a exportação
+                            var headers = ['Nome', 'Idade', 'Celular', 'Ministério?', 'Salinha'];
+                            
+                            for (var i = 0; i < cells.length && i < headers.length; i++) {
+                                var cell = cells[i];
+                                var textNode = cell.getElementsByTagName('v')[0];
+                                if (textNode) {
+                                    textNode.textContent = headers[i];
+                                }
+                            }
+                        }
+                    },
+                ]
+            });
+
+            // Associar botões personalizados aos botões do DataTable
+            $('.btn-export').eq(0).on('click', function () {
+                dataTable.button(0).trigger();
+            });
+
+            $('.btn-export').eq(1).on('click', function () {
+                dataTable.button(1).trigger();
+            });
+
+            // Filtrar participantes
+            $('#filterForm').on('submit', function (e) {
+                e.preventDefault();
+                aplicarFiltros();
+            });
+
+            // Código do botão "limparFiltro" removido
+
+
+
+            // Adicione este código ao seu script existente
+            $('#participanteModal').on('hide.bs.modal', function (e) {
+                // Remover o foco de todos os elementos focáveis dentro do modal
+                $(this).find('button, input, select, textarea, a[href]').blur();
+            });
+
+            // Configurar o botão de exclusão
+            $('#btnExcluirParticipante').on('click', function () {
+                const participanteId = $(this).data('id');
+
+                if (!participanteId) {
+                    alert("Erro: Não foi possível identificar o participante para exclusão.");
+                } else {
+                    excluirParticipante(participanteId);
+                }
+            });
+        });
+
+        // Função para Carregar participante
+        function carregarParticipantes() {
+            db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes")
+                .where("anoevento", "==", "2026")
+                .where("tipoInsc", "==", "treinamento")
+                .get()
+                .then((querySnapshot) => {
+
+                    // Limpar DataTable
+                    dataTable.clear();
+
+                    // Armazenar o total de participantes
+                    totalParticipantes = querySnapshot.size;
+
+                    // Array para armazenar dados dos participantes para o gráfico
+                    const dadosParticipantes = [];
+
+                    querySnapshot.forEach((doc) => {
+                        const participante = doc.data();
+                        
+                        // Adicionar aos dados do gráfico
+                        dadosParticipantes.push(participante);
+
+                        // Linhas ao DataTable
+                        dataTable.row.add([
+                            participante.nome,
+                            participante.idade,
+                            participante.celularResponsavel,
+                            participante.fazParteMinisterio || 'N/A',
+                            participante.qualSalinha || '-',
+                            `<button class="btn btn-info btn-sm" onclick="verDetalhes('${doc.id}')">Ver</button>
+                             <button class="btn btn-danger btn-sm" onclick="excluirParticipante('${doc.id}')">Excluir</button>`
+                        ]);
+
+                    });
+
+                    // Renderizar DataTable
+                    dataTable.draw();
+
+                    // Criar gráfico de faixa etária
+                    criarGraficoFaixaEtaria(dadosParticipantes);
+
+                    // Atualizar contador
+                    atualizarContador();
+
+                })
+                .catch((error) => {
+                    console.error("Erro ao carregar participantes: ", error);
+                    alert("Erro ao carregar lista de participantes. Tente novamente.");
+                });
+        }
+
+        // Adicione esta função para atualizar o contador
+        function atualizarContador() {
+            const participantesFiltrados = dataTable.rows({ search: 'applied' }).count();
+
+            $('#contador-participantes').text(participantesFiltrados);
+            $('#total-participantes').text(totalParticipantes);
+
+            // Mostrar ou esconder o texto de filtro
+            if (participantesFiltrados < totalParticipantes) {
+                $('#texto-filtro').show();
+            } else {
+                $('#texto-filtro').hide();
+            }
+        }
+
+        function verDetalhes(participanteId) {
+            db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes").doc(participanteId)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const p = doc.data();
+
+                        // Informações Pessoais
+                        $('#modalNome').text(p.nome || 'N/A');
+                        $('#modalIdade').text(p.idade || 'N/A');
+                        $('#modalCelularResp').text(p.celularResponsavel || 'N/A');
+
+                        // Dados do Ministério
+                        $('#modalFazParte').text(p.fazParteMinisterio || 'N/A');
+                        $('#modalSalinha').text(p.qualSalinha || '-');
+
+                        // Informações do Evento e Registro
+                        $('#modalDtRegistro').text(formatarDataHora(p.dtRegistro) || 'N/A');
+                        $('#modalAnoEvento').text(p.anoevento || 'N/A');
+
+                        // Armazenar ID do participante no botão de exclusão
+                        $('#btnExcluirParticipante').data('id', doc.id);
+
+                        // Abrir modal
+                        $('#participanteModal').modal('show');
+                    } else {
+                        console.error("Documento não encontrado para ID:", participanteId);
+                        alert("Participante não encontrado!");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Erro ao buscar detalhes: ", error);
+                    alert("Erro ao buscar detalhes do participante.");
+                });
+        }
+
+        // Função para formatar data e hora
+        function formatarDataHora(dataString) {
+            if (!dataString) return '';
+
+            try {
+                const data = new Date(dataString);
+                return data.toLocaleString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                return dataString;
+            }
+        }
+
+        function aplicarFiltros() {
+            // Função simplificada - sem filtros de pagamento
+            dataTable.search('').columns().search('').draw();
+        }
+
+        function formatarData(dataString) {
+            if (!dataString) return '';
+
+            try {
+                const data = new Date(dataString);
+                return data.toLocaleDateString('pt-BR');
+            } catch (e) {
+                return dataString;
+            }
+        }
+
+        function excluirParticipante(participanteId) {
+            if (!participanteId) {
+                alert("Erro: Não foi possível identificar o participante para exclusão.");
+                return;
+            }
+
+            if (confirm("Tem certeza que deseja excluir este participante? Esta ação não pode ser desfeita.")) {
+                db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes").doc(participanteId)
+                    .delete()
+                    .then(() => {
+                        alert("Participante excluído com sucesso!");
+                        $('#participanteModal').modal('hide');
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 500);
+                    })
+                    .catch((error) => {
+                        alert("Erro ao excluir participante: " + error.message);
+                    });
+            }
+
+            carregarParticipantes(); // Recarrega a lista após exclusão
+
+        }
+
+        // Função para criar gráfico de faixa etária/salinha
+        function criarGraficoFaixaEtaria(dados) {
+            const ctx = document.getElementById('faixaEtariaChart').getContext('2d');
+            
+            // Destruir gráfico existente se houver
+            if (faixaEtariaChart) {
+                faixaEtariaChart.destroy();
+            }
+            
+            // Definir categorias baseadas no formulário
+            const categorias = {
+                '2 E 3 ANOS': 0,
+                '4 A 6 ANOS': 0,
+                '7 E 8 ANOS': 0,
+                '9 A 12 ANOS': 0,
+                'OUTRAS FUNCOES': 0,
+                'Sem Salinha': 0,
+                'Total': 0
+            };
+            
+            const coresInfo = {
+                '2 E 3 ANOS': { cor: '#4CAF50', nome: '2-3 Anos', emoji: '👶' },
+                '4 A 6 ANOS': { cor: '#dfca0d', nome: '4-6 Anos', emoji: '🧸' },
+                '7 E 8 ANOS': { cor: '#FF9C33', nome: '7-8 Anos', emoji: '🎨' },
+                '9 A 12 ANOS': { cor: '#FF4C4C', nome: '9-12 Anos', emoji: '📚' },
+                'OUTRAS FUNCOES': { cor: '#9C27B0', nome: 'Outros', emoji: '✨' },
+                'Sem Salinha': { cor: '#9E9E9E', nome: 'N/A', emoji: '⚪' },
+                'Total': { cor: '#2196F3', nome: 'Total', emoji: '📊' }
+            };
+
+            // Contar participantes por categoria
+            dados.forEach(participante => {
+                const salinha = participante.qualSalinha;
+                
+                if (salinha && categorias.hasOwnProperty(salinha)) {
+                    categorias[salinha]++;
+                } else if (salinha) {
+                    // Caso tenha uma salinha que não está nas chaves (ex: texto livre antigo ou erro)
+                    // Vamos agrupar em Outras ou criar logica, mas por enquanto:
+                    categorias['OUTRAS FUNCOES']++; 
+                } else {
+                    categorias['Sem Salinha']++;
+                }
+                categorias['Total']++;
+            });
+            
+            faixaEtariaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(categorias),
+                    datasets: [{
+                        label: 'Quantidade de Participantes',
+                        data: Object.values(categorias),
+                        backgroundColor: [
+                            'rgba(76, 175, 80, 0.85)',    // 2-3
+                            'rgba(255, 235, 59, 0.85)',   // 4-6
+                            'rgba(255, 156, 51, 0.85)',   // 7-8
+                            'rgba(255, 76, 76, 0.85)',    // 9-12
+                            'rgba(156, 39, 176, 0.85)',   // Outras
+                            'rgba(158, 158, 158, 0.85)',  // Sem Salinha
+                            'rgba(33, 150, 243, 0.85)'    // Total
+                        ],
+                        borderColor: [
+                            'rgba(76, 175, 80, 1)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(255, 156, 51, 1)',
+                            'rgba(255, 76, 76, 1)',
+                            'rgba(156, 39, 176, 1)',
+                            'rgba(158, 158, 158, 1)',
+                            'rgba(33, 150, 243, 1)'
+                        ],
+                        borderWidth: 3,
+                        borderRadius: {
+                            topLeft: 8,
+                            topRight: 8,
+                            bottomLeft: 4,
+                            bottomRight: 4
+                        },
+                        borderSkipped: false,
+                        hoverBackgroundColor: [
+                            'rgba(76, 175, 80, 0.95)',
+                            'rgba(255, 235, 59, 0.95)',
+                            'rgba(255, 156, 51, 0.95)',
+                            'rgba(255, 76, 76, 0.95)',
+                            'rgba(156, 39, 176, 0.95)',
+                            'rgba(158, 158, 158, 0.95)',
+                            'rgba(33, 150, 243, 0.95)'
+                        ],
+                        hoverBorderWidth: 4,
+                        shadowOffsetX: 3,
+                        shadowOffsetY: 3,
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(44, 62, 80, 0.95)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#3498db',
+                            borderWidth: 2,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            padding: 12,
+                            callbacks: {
+                                title: function(context) {
+                                    const cat = context[0].label;
+                                    const info = coresInfo[cat];
+                                    return `${info.emoji} ${info.nome}`;
+                                },
+                                label: function(context) {
+                                    const valor = context.parsed.y;
+                                    const cat = context.label;
+                                    
+                                    if (cat === 'Total') {
+                                        return `${valor} participante${valor !== 1 ? 's' : ''} inscritos`;
+                                    }
+                                    
+                                    const totalSemTotal = Object.keys(categorias)
+                                        .filter(key => key !== 'Total')
+                                        .reduce((sum, key) => sum + categorias[key], 0);
+                                    const percentual = totalSemTotal > 0 ? ((valor / totalSemTotal) * 100).toFixed(1) : 0;
+                                    return `${valor} participante${valor !== 1 ? 's' : ''} (${percentual}%)`;
+                                }
+                            }
+                        },
+                        datalabels: false
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                color: '#5a6c7d',
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                },
+                                padding: 8
+                            },
+                            grid: {
+                                color: 'rgba(90, 108, 125, 0.1)',
+                                lineWidth: 1,
+                                drawBorder: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#5a6c7d',
+                                font: {
+                                    size: 12, // Reduzido um pouco para caber
+                                    weight: 'bold'
+                                },
+                                padding: 8,
+                                maxRotation: 45, // Permitir rotação se necessário
+                                minRotation: 0
+                            },
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutCubic',
+                        delay: (context) => {
+                            return context.dataIndex * 200;
+                        },
+                        onComplete: function() {
+                            // Desenhar valores em cima das barras após a animação
+                            const chart = this;
+                            const ctx = chart.ctx;
+                            
+                            ctx.font = 'bold 16px Montserrat';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            
+                            chart.data.datasets.forEach((dataset, i) => {
+                                const meta = chart.getDatasetMeta(i);
+                                meta.data.forEach((bar, index) => {
+                                    const data = dataset.data[index];
+                                    const cat = chart.data.labels[index];
+                                    const info = coresInfo[cat];
+                                    
+                                    if (data > 0) {
+                                        ctx.fillStyle = info.cor;
+                                        ctx.strokeStyle = '#fff';
+                                        ctx.lineWidth = 3;
+                                        
+                                        const text = `${data}`;
+                                        const x = bar.x;
+                                        const y = bar.y - 8;
+                                        
+                                        ctx.strokeText(text, x, y);
+                                        ctx.fillText(text, x, y);
+                                    }
+                                });
+                            });
+                        }
+                    },
+                    hover: {
+                        animationDuration: 300
+                    },
+                    layout: {
+                        padding: {
+                            top: 30,
+                            bottom: 10,
+                            left: 0,
+                            right: 0
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
