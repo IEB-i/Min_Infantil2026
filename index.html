@@ -1,359 +1,410 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+<!-- ok -->
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSCRIÇÕES TREINAMENTO MINISTÉRIO INFANTIL 2026</title>
+    <title>INSCRIÇÕES</title>
     <link rel="shortcut icon" href="./assets/3.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="./firebase/firebaseConfig.js"></script>
     <style>
         body {
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            font-family: 'Montserrat', sans-serif;
-            color: #333;
-            padding-top: 100px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header {
-            background: linear-gradient(45deg, #FFA500, #800080);
-            padding: 10px;
+            background-color: #f4ebda;
+            padding-top: 0px;
+            overflow: hidden;
             text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .header img {
-            max-width: 150px;
-        }
-
-        .settings-icon {
-            position: absolute;
-            right: 20px;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .settings-icon:hover {
-            transform: scale(1.1);
-            color: #f0f0f0;
-        }
-
-        .info-box {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .divider {
-            width: 75%;
-            height: 2px;
-            background-color: #000;
-            margin: 30px auto;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #800080, #FFA500);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(45deg, #9400D3, #FF8C00);
-        }
-
-        .form-control:focus {
-            border-color: #800080;
-            box-shadow: 0 0 0 0.2rem rgba(128, 0, 128, 0.25);
-        }
-
-        .switch {
             position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 24px;
-            margin-left: 10px;
         }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
+        .position-relative {
+            position: relative;
         }
 
-        .slider {
+        .btn-hidden {
+            display: none !important;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(to right, #7a2c6c, #a92f85);
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            text-transform: uppercase;
+            border: none;
+            box-shadow: 0 4px 15px rgba(58, 16, 86, 0.4);
+            transition: all 0.3s ease;
             position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
+            top: 52%;
+            left: 84%;
+            transform: translateX(-50%);
+            text-decoration: none;
+            min-width: 200px;
+            text-align: center;
+            animation: subtle-glow 3s ease-in-out infinite;
         }
 
-        .slider:before {
+        .btn-gradient:hover {
+            background: linear-gradient(to right, #a92f85, #7a2c6c);
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 8px 25px rgba(58, 16, 86, 0.6);
+            color: white;
+            text-decoration: none;
+            animation: none;
+        }
+
+        .btn-esgotado {
+            background: #6c757d !important;
+            color: white !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            animation: none !important;
+        }
+
+        .btn-esgotado:hover {
+            background: #6c757d !important;
+            transform: translateX(-50%) !important;
+            box-shadow: none !important;
+            color: white !important;
+            text-decoration: none !important;
+        }
+
+        .alerta-esgotado {
             position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
+            top: 49%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            max-width: 400px;
+            z-index: 15;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Efeito glow profissional */
+        @keyframes subtle-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 15px rgba(58, 16, 86, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 4px 20px rgba(169, 47, 132, 0.6), 0 0 30px rgba(122, 44, 108, 0.3);
+            }
+        }
+
+        .desktop-image {
+            margin-top: 0px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            object-fit: contain;
+        }
+
+        .mobile-image {
+            display: none;
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 55%;
+            left: 53%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #a92f85;
             border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        input:checked+.slider {
-            background: linear-gradient(45deg, #800080, #FFA500);
+        .loading-text {
+            margin-top: 15px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            width: 100%;
+            display: block;
+            margin-left: -35%;
+            margin-right: auto;
         }
 
-        input:checked+.slider:before {
-            transform: translateX(16px);
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .gestao-icon {
+            position: fixed;
+            top: 7px;
+            right: 7px;
+            z-index: 1000;
+            color: rgb(0, 0, 0) !important;
+            font-size: 20px;
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+            filter: none;
+            text-shadow: none;
+            background: none;
+            border: none;
+            box-shadow: none;
+        }
+
+        .gestao-icon:hover {
+            opacity: 1;
+            color: rgb(0, 0, 0) !important;
+            text-decoration: none;
+            transform: none;
+            filter: none;
+            text-shadow: none;
+            background: none;
+            border: none;
+            box-shadow: none;
+        }
+
+        @media screen and (max-width: 852px) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .mobile-image {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height:100%;
+                object-fit: cover;
+                z-index: 1;
+                margin: 0;
+                padding: 0;
+            }
+
+            .desktop-image {
+                display: none;
+            }
+
+            .btn-gradient {
+                padding: 4% 4%;
+                font-size: 5%x;
+                min-width: 75%;
+                top: 69.5%;
+                left: 50%;
+                z-index: 10;
+                position: fixed;
+            }
+
+            .alerta-esgotado {
+                position: fixed;
+                top: 80%;
+                left: 53%;
+                max-width: 90%;
+                font-size: 20px;
+                padding: 12px 20px;
+            }
+
+            .loading-spinner {
+                position: fixed;
+                top: 76%;
+                min-width: 60%;
+                left: 75%;
+                z-index: 10;
+            }
+
+            .loading-text {
+                margin-top: 5px;
+                margin-left: -40%;
+            }
+        }
+
+        @media screen and (min-width: 853px) and (max-width: 1024px) {
+            .mobile-image {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height:100%;
+                object-fit: cover;
+                z-index: 1;
+                margin: 0;
+                padding: 0;
+            }
+
+            .desktop-image {
+                display: none;
+            }
+
+            .btn-gradient {
+                padding: 6% 4%;
+                font-size: 5%x;
+                min-width: 80%;
+                top: 70%;
+                left: 50%;
+                z-index: 10;
+                position: fixed;
+            }
+
+            .alerta-esgotado {
+                position: fixed;
+                top: 70%;
+                left: 53%;
+                max-width: 90%;
+                font-size: 20px;
+                padding: 12px 20px;
+            }
+
+            .loading-spinner {
+                position: fixed;
+                top: 75%;
+                min-width: 60%;
+                left: 75%;
+                z-index: 10;
+            }
+
+            .loading-text {
+                margin-top: 5px;
+                margin-left: -40%;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="header">
-        <img src="./assets/LogoBranco.png" alt="Logo Treinamento 2026">
-        <i class="material-icons settings-icon" onclick="window.location.href='login.html'" title="Configurações">settings</i>
-    </div>
-    <div class="container">
-        <h2 class="text-center mb-4 font-weight-bold">TREINAMENTO MINISTÉRIO INFANTIL 2026</h2>
+    <!-- Ícone de Gestão -->
+    <a href="login.html" class="gestao-icon" title="Acessar Gestão">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" class="bi bi-gear" viewBox="0 0 16 16">
+            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
+            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.892 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.892-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+        </svg>
+    </a>
 
-        <div class="info-box">
-            <h4 class="text-center mb-3"><strong>🎉 ENTRADA FRANCA 🎉</strong></h4>
-            
-            <div class="mb-3">
-                <!-- <h5><strong>TEMA: TARDE DA ALEGRIA</strong></h5> -->
-                <p><strong>📍 Local:</strong> Igreja Evangélica Batista em Intermares<br><br>
-                <strong>📅 Datas:</strong><br>
-                • 20/02 (quinta) – 19:45 às 21:00<br>
-                • 21/02 (sexta) – 14:00 às 17:00</p>
-            </div>
-<!--              -->
-            <!-- <div class="mt-3"> -->
-                <!-- <h6><strong>OBSERVAÇÕES:</strong></h6> -->
-                <!-- <p>1. Teremos <strong>DESFILE</strong> de Fantasias de personagens bíblicos. Capriche em sua <strong>FANTASIA!</strong><br> -->
-                <!-- 2. Vir com roupas leves</p> -->
-            <!-- </div> -->
-        <!-- </div> -->
+    <img src="./assets/Texto.png" alt="Texto" class="img-fluid mb-4 desktop-image">
+    <img src="./assets/Texto Celular.png" alt="Texto" class="img-fluid mb-4 mobile-image">
 
-        <div class="divider"></div>
-        <form id="ebfForm">
-            <div class="form-group">
-                <label for="nome">Nome Completo</label>
-                <input type="text" class="form-control" id="nome" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="idade">Idade (anos)</label>
-                <input type="number" class="form-control" id="idade" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="celularResponsavel">Celular</label>
-                <input type="tel" class="form-control" id="celularResponsavel" placeholder="(99) 99999-9999" required>
-            </div>
+    <a href="frminscricao.html" class="btn-gradient btn-hidden" id="btnInscricao">
+        Inscreva-se Agora
+    </a>
 
-            <div class="form-group">
-                <label>Faz parte do Min. Infantil?</label>
-                <div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="fazParteMinisterio" id="parteSim" value="Sim" required>
-                        <label class="form-check-label" for="parteSim">Sim</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="fazParteMinisterio" id="parteNao" value="Não" required>
-                        <label class="form-check-label" for="parteNao">Não</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group" id="divSalinha" style="display: none;">
-                <label for="qualSalinha">Qual Salinha?</label>
-                <select class="form-control" id="qualSalinha">
-                    <option value="">Selecione uma opção...</option>
-                    <option value="2 E 3 ANOS">2 e 3 anos</option>
-                    <option value="4 A 6 ANOS">4 a 6 anos</option>
-                    <option value="7 E 8 ANOS">7 e 8 anos</option>
-                    <option value="9 A 12 ANOS">9 a 12 anos</option>
-                    <option value="OUTRAS FUNCOES">Outras Funções</option>
-                </select>
-            </div>
-            
-            <div class="text-center mt-4 mb-4">
-                <p style="font-size: 1.1em; color: #800080;"><strong>✨ Estamos preparando tudo com muito carinho para você! ✨</strong></p>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" id="cadastrarBtn">Cadastrar</button>
-        </form>
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <div class="loading-text">Verificando vagas disponíveis...</div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.1.0/vanilla-masker.min.js"></script>
+    <div class="alerta-esgotado" id="alertaEsgotado" style="display: none;">
+        <div>🚫 <strong>Inscrições Encerradas!</strong></div>
+        <div style="font-size: 14px; margin-top: 5px;">Limite de vagas atingido</div>
+    </div>
+
     <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyC31C1X13eqVAOq_o5K2evI8q3GOfnpOpo",
-            authDomain: "iebi-2e84e.firebaseapp.com",
-            projectId: "iebi-2e84e",
-            storageBucket: "iebi-2e84e.appspot.com",
-            messagingSenderId: "634456198202",
-            appId: "1:634456198202:web:8b4de1b4def23a49303903"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // ✅ SOLUÇÃO: Ler apenas 1 documento contador
+        function verificarLimiteInscricoes() {
+            if (typeof db === 'undefined') {
+                console.error('Firebase não foi inicializado corretamente');
+                return;
+            }
 
-        // Função para verificar se o nome já existe
-        function verificarNomeExistente(nome) {
-            return db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes")
-                .where("nome", "==", nome)
-                .where("anoevento", "==", "2026")
-                .get()
-                .then((querySnapshot) => {
-                    return !querySnapshot.empty;
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            loadingSpinner.style.display = 'block';
+
+            // ✅ LER APENAS 1 DOCUMENTO = 1 LEITURA
+            db.collection("Eventos").doc("TreinamentoMI2026")  // Acesse diretamente o documento TreinamentoMI2026
+                .get()  // Aqui você já faz a leitura do documento
+                .then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        const totalInscricoes = (data.contador && data.contador.totalInscricoes) ? data.contador.totalInscricoes : 0;  // Verificação segura do contador
+                        console.log(`Total de inscrições Filhas do Rei: ${totalInscricoes}`);
+
+                        const btnInscricao = document.getElementById('btnInscricao');
+                        const alertaEsgotado = document.getElementById('alertaEsgotado');
+
+                        loadingSpinner.style.display = 'none';
+                        btnInscricao.classList.remove('btn-hidden');
+
+                        if (totalInscricoes >= 800) {
+                            // Desabilitar o botão
+                            btnInscricao.classList.add('btn-esgotado');
+                            btnInscricao.classList.remove('btn-gradient');
+                            btnInscricao.textContent = 'Inscrições Encerradas';
+                            btnInscricao.href = '#';
+                            btnInscricao.onclick = function (e) {
+                                e.preventDefault();
+                                alert('Desculpe, as inscrições foram encerradas. Limite de vagas atingido.');
+                                return false;
+                            };
+                            alertaEsgotado.style.display = 'block';
+                        } else {
+                            // Manter o botão habilitado
+                            btnInscricao.classList.remove('btn-esgotado');
+                            btnInscricao.classList.add('btn-gradient');
+                            btnInscricao.textContent = 'Inscreva-se Agora';
+                            btnInscricao.href = 'frminscricao.html';
+                            btnInscricao.onclick = null;
+                            alertaEsgotado.style.display = 'none';
+                        }
+                    } else {
+                        console.log("Documento TreinamentoMI2026 não existe");
+                        // Fallback: assumir 0 inscrições
+                        handleButtonState(0);
+                    }
                 })
                 .catch((error) => {
-                    console.error("Erro ao verificar nome existente: ", error);
-                    return false;
+                    console.error("Erro ao verificar contador:", error);
+                    // Em caso de erro, mostrar o botão funcionando
+                    handleErrorState();
                 });
+
+
         }
 
-        // Adicionar evento 'blur' ao campo 'nome'
-        document.getElementById('nome').addEventListener('blur', function () {
-            const nome = this.value.trim().toUpperCase();
-            if (nome) {
-                verificarNomeExistente(nome).then(existe => {
-                    if (existe) {
-                        alert('Este nome já está cadastrado para o Treinamento Ministério Infantil 2026.');
-                        this.value = ''; // Limpa o campo
-                        this.focus(); // Redireciona o cursor para o campo
-                        document.getElementById('cadastrarBtn').disabled = true;
-                    } else {
-                        document.getElementById('cadastrarBtn').disabled = false;
-                    }
-                });
-            }
+        // Verificar limite quando a página carregar
+        document.addEventListener('DOMContentLoaded', function () {
+            // Aguardar um pouco para garantir que o Firebase foi inicializado
+            setTimeout(verificarLimiteInscricoes, 1000);
         });
 
-        // Função para converter texto para maiúsculas
-        function toUpperCase(input) {
-            input.value = input.value.toUpperCase();
-        }
-
-        // Adicionar evento de input para campos de texto
-        const textInputs = document.querySelectorAll('input[type="text"]');
-        textInputs.forEach(input => {
-            input.addEventListener('input', function () {
-                toUpperCase(this);
-            });
-        });
-
-        // Máscara para o celular do responsável
-        VMasker(document.getElementById("celularResponsavel")).maskPattern("(99) 99999-9999");
-
-        // Lógica para mostrar/ocultar o campo 'Qual Salinha'
-        const radioSim = document.getElementById('parteSim');
-        const radioNao = document.getElementById('parteNao');
-        const divSalinha = document.getElementById('divSalinha');
-        const inputSalinha = document.getElementById('qualSalinha');
-
-        function toggleSalinha() {
-            if (radioSim.checked) {
-                divSalinha.style.display = 'block';
-                inputSalinha.required = true;
-            } else {
-                divSalinha.style.display = 'none';
-                inputSalinha.value = '';
-                inputSalinha.required = false;
-            }
-        }
-
-        radioSim.addEventListener('change', toggleSalinha);
-        radioNao.addEventListener('change', toggleSalinha);
-
-        document.getElementById('ebfForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            // Verificar novamente se o nome já existe antes de enviar
-            const nome = document.getElementById('nome').value.trim().toUpperCase();
-            verificarNomeExistente(nome).then(existe => {
-                if (existe) {
-                    alert('Este nome já está cadastrado para o Treinamento 2026. Não é possível prosseguir com o cadastro.');
-                    return;
-                }
-
-                const fazParte = document.querySelector('input[name="fazParteMinisterio"]:checked').value;
-                const salinha = document.getElementById('qualSalinha').value.trim().toUpperCase();
-
-                // Se o nome não existir, continuar com o envio do formulário
-                const formData = {
-                    nome: nome,
-                    idade: document.getElementById('idade').value,
-                    celularResponsavel: document.getElementById('celularResponsavel').value,
-                    fazParteMinisterio: fazParte,
-                    qualSalinha: salinha,
-                    anoevento: '2026',
-                    dtRegistro: new Date().toLocaleDateString('pt-BR'),
-                    tipoInsc: 'treinamento'
-                };
-
-                db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes").add(formData)
-                    .then((docRef) => {
-                        console.log("Documento escrito com ID: ", docRef.id);
-                        
-                        // Enviar email de notificação
-                        const emailData = {
-                            to: 'iebi.intermares@gmail.com',
-                            subject: 'Nova Inscrição - Treinamento Ministério Infantil 2026',
-                            text: `Nova inscrição realizada:
-                            
-Nome: ${formData.nome}
-Idade: ${formData.idade}
-Celular: ${formData.celularResponsavel}
-Faz parte do ministério? ${formData.fazParteMinisterio}
-Salinha: ${formData.qualSalinha}
-Data de Registro: ${formData.dtRegistro}`
-                        };
-
-                        // Aqui você pode implementar o envio do email usando um serviço como EmailJS
-                        console.log('Email a ser enviado:', emailData);
-                        
-                        window.location.href = 'obrigado.html';
-                        this.reset();
-                    })
-                    .catch((error) => {
-                        console.error("Erro ao adicionar documento: ", error);
-                        alert('Erro ao realizar inscrição. Por favor, tente novamente.');
-                    });
-            });
-        });
+        // Verificar limite periodicamente (a cada 30 segundos)
+        setInterval(verificarLimiteInscricoes, 30000);
     </script>
 </body>
 

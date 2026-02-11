@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSCRIÇÕES TREINAMENTO MINISTÉRIO INFANTIL 2026</title>
+    <link rel="shortcut icon" href="./assets/3.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        body {
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            padding-top: 100px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(45deg, #FFA500, #800080);
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header img {
+            max-width: 150px;
+        }
+
+        .settings-icon {
+            position: absolute;
+            right: 20px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .settings-icon:hover {
+            transform: scale(1.1);
+            color: #f0f0f0;
+        }
+
+        .info-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .divider {
+            width: 75%;
+            height: 2px;
+            background-color: #000;
+            margin: 30px auto;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #800080, #FFA500);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #9400D3, #FF8C00);
+        }
+
+        .form-control:focus {
+            border-color: #800080;
+            box-shadow: 0 0 0 0.2rem rgba(128, 0, 128, 0.25);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 24px;
+            margin-left: 10px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background: linear-gradient(45deg, #800080, #FFA500);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(16px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <img src="./assets/LogoBranco.png" alt="Logo Treinamento 2026">
+        <!-- <i class="material-icons settings-icon" onclick="window.location.href='login.html'" title="Configurações">settings</i> -->
+    </div>
+    <div class="container">
+        <h2 class="text-center mb-4 font-weight-bold">TREINAMENTO MINISTÉRIO INFANTIL 2026</h2>
+
+        <div class="info-box">
+            <h4 class="text-center mb-3"><strong>🎉 ENTRADA FRANCA</strong></h4>
+            
+            <div class="mb-3">
+                <!-- <h5><strong>TEMA: TARDE DA ALEGRIA</strong></h5> -->
+                <p><strong>📍 Local:</strong> Igreja Evangélica Batista em Intermares<br><br>
+                <strong>📅 Datas:</strong><br>
+                • 20/02 (quinta) – 19:45 às 21:00<br>
+                • 21/02 (sexta) – 14:00 às 17:00</p>
+            </div>
+<!--              -->
+            <!-- <div class="mt-3"> -->
+                <!-- <h6><strong>OBSERVAÇÕES:</strong></h6> -->
+                <!-- <p>1. Teremos <strong>DESFILE</strong> de Fantasias de personagens bíblicos. Capriche em sua <strong>FANTASIA!</strong><br> -->
+                <!-- 2. Vir com roupas leves</p> -->
+            <!-- </div> -->
+        <!-- </div> -->
+
+        <div class="divider"></div>
+        <form id="ebfForm">
+            <div class="form-group">
+                <label for="nome">Nome Completo</label>
+                <input type="text" class="form-control" id="nome" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="idade">Idade (anos)</label>
+                <input type="number" class="form-control" id="idade" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="celularResponsavel">Celular</label>
+                <input type="tel" class="form-control" id="celularResponsavel" placeholder="(99) 99999-9999" required>
+            </div>
+
+            <div class="form-group">
+                <label>Faz parte do Min. Infantil?</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="fazParteMinisterio" id="parteSim" value="Sim" required>
+                        <label class="form-check-label" for="parteSim">Sim</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="fazParteMinisterio" id="parteNao" value="Não" required>
+                        <label class="form-check-label" for="parteNao">Não</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="divSalinha" style="display: none;">
+                <label for="qualSalinha">Qual Salinha?</label>
+                <select class="form-control" id="qualSalinha">
+                    <option value="">Selecione uma opção...</option>
+                    <option value="2 E 3 ANOS">2 e 3 anos</option>
+                    <option value="4 A 6 ANOS">4 a 6 anos</option>
+                    <option value="7 E 8 ANOS">7 e 8 anos</option>
+                    <option value="9 A 12 ANOS">9 a 12 anos</option>
+                    <option value="OUTRAS FUNCOES">Outras Funções</option>
+                </select>
+            </div>
+            
+            <div class="text-center mt-4 mb-4">
+                <p style="font-size: 1.1em; color: #800080;"><strong>✨ Estamos preparando tudo com muito carinho para você!</strong></p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="cadastrarBtn">Cadastrar</button>
+        </form>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.1.0/vanilla-masker.min.js"></script>
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC31C1X13eqVAOq_o5K2evI8q3GOfnpOpo",
+            authDomain: "iebi-2e84e.firebaseapp.com",
+            projectId: "iebi-2e84e",
+            storageBucket: "iebi-2e84e.appspot.com",
+            messagingSenderId: "634456198202",
+            appId: "1:634456198202:web:8b4de1b4def23a49303903"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Função para verificar se o nome já existe
+        function verificarNomeExistente(nome) {
+            return db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes")
+                .where("nome", "==", nome)
+                .where("anoevento", "==", "2026")
+                .get()
+                .then((querySnapshot) => {
+                    return !querySnapshot.empty;
+                })
+                .catch((error) => {
+                    console.error("Erro ao verificar nome existente: ", error);
+                    return false;
+                });
+        }
+
+        // Adicionar evento 'blur' ao campo 'nome'
+        document.getElementById('nome').addEventListener('blur', function () {
+            const nome = this.value.trim().toUpperCase();
+            if (nome) {
+                verificarNomeExistente(nome).then(existe => {
+                    if (existe) {
+                        alert('Este nome já está cadastrado para o Treinamento Ministério Infantil 2026.');
+                        this.value = ''; // Limpa o campo
+                        this.focus(); // Redireciona o cursor para o campo
+                        document.getElementById('cadastrarBtn').disabled = true;
+                    } else {
+                        document.getElementById('cadastrarBtn').disabled = false;
+                    }
+                });
+            }
+        });
+
+        // Função para converter texto para maiúsculas
+        function toUpperCase(input) {
+            input.value = input.value.toUpperCase();
+        }
+
+        // Adicionar evento de input para campos de texto
+        const textInputs = document.querySelectorAll('input[type="text"]');
+        textInputs.forEach(input => {
+            input.addEventListener('input', function () {
+                toUpperCase(this);
+            });
+        });
+
+        // Máscara para o celular do responsável
+        VMasker(document.getElementById("celularResponsavel")).maskPattern("(99) 99999-9999");
+
+        // Lógica para mostrar/ocultar o campo 'Qual Salinha'
+        const radioSim = document.getElementById('parteSim');
+        const radioNao = document.getElementById('parteNao');
+        const divSalinha = document.getElementById('divSalinha');
+        const inputSalinha = document.getElementById('qualSalinha');
+
+        function toggleSalinha() {
+            if (radioSim.checked) {
+                divSalinha.style.display = 'block';
+                inputSalinha.required = true;
+            } else {
+                divSalinha.style.display = 'none';
+                inputSalinha.value = '';
+                inputSalinha.required = false;
+            }
+        }
+
+        radioSim.addEventListener('change', toggleSalinha);
+        radioNao.addEventListener('change', toggleSalinha);
+
+        document.getElementById('ebfForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Verificar novamente se o nome já existe antes de enviar
+            const nome = document.getElementById('nome').value.trim().toUpperCase();
+            verificarNomeExistente(nome).then(existe => {
+                if (existe) {
+                    alert('Este nome já está cadastrado para o Treinamento 2026. Não é possível prosseguir com o cadastro.');
+                    return;
+                }
+
+                const fazParte = document.querySelector('input[name="fazParteMinisterio"]:checked').value;
+                const salinha = document.getElementById('qualSalinha').value.trim().toUpperCase();
+
+                // Se o nome não existir, continuar com o envio do formulário
+                const formData = {
+                    nome: nome,
+                    idade: document.getElementById('idade').value,
+                    celularResponsavel: document.getElementById('celularResponsavel').value,
+                    fazParteMinisterio: fazParte,
+                    qualSalinha: salinha,
+                    anoevento: '2026',
+                    dtRegistro: new Date().toLocaleDateString('pt-BR'),
+                    tipoInsc: 'treinamento'
+                };
+
+                db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes").add(formData)
+                    .then((docRef) => {
+                        console.log("Documento escrito com ID: ", docRef.id);
+                        
+                        // Enviar email de notificação
+                        const emailData = {
+                            to: 'iebi.intermares@gmail.com',
+                            subject: 'Nova Inscrição - Treinamento Ministério Infantil 2026',
+                            text: `Nova inscrição realizada:
+                            
+Nome: ${formData.nome}
+Idade: ${formData.idade}
+Celular: ${formData.celularResponsavel}
+Faz parte do ministério? ${formData.fazParteMinisterio}
+Salinha: ${formData.qualSalinha}
+Data de Registro: ${formData.dtRegistro}`
+                        };
+
+                        // Aqui você pode implementar o envio do email usando um serviço como EmailJS
+                        console.log('Email a ser enviado:', emailData);
+                        
+                        window.location.href = 'obrigado.html';
+                        this.reset();
+                    })
+                    .catch((error) => {
+                        console.error("Erro ao adicionar documento: ", error);
+                        alert('Erro ao realizar inscrição. Por favor, tente novamente.');
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>
