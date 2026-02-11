@@ -327,12 +327,27 @@
                 db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
-                        
-                        // Enviar email de notificação
-                        const emailData = {
-                            to: 'iebi.intermares@gmail.com',
-                            subject: 'Nova Inscrição - Treinamento Ministério Infantil 2026',
-                            text: `Nova inscrição realizada:
+
+                        // Atualizar o contador de inscrições
+                        const eventoRef = db.collection("Eventos").doc("TreinamentoMI2026");
+                        eventoRef.update({
+                            "contador.totalInscricoes": firebase.firestore.FieldValue.increment(1),
+                            "ultimaAtualizacao": firebase.firestore.FieldValue.serverTimestamp()
+                        }).catch(err => {
+                            console.error("Erro ao atualizar contador: ", err);
+                            // Se o erro for porque o documento ou campo não existe, tentar com set
+                            if (err.code === 'not-found' || err.message.includes("No document to update")) {
+                                return eventoRef.set({
+                                    contador: { totalInscricoes: 1 },
+                                    ultimaAtualizacao: firebase.firestore.FieldValue.serverTimestamp()
+                                }, { merge: true });
+                            }
+                        }).finally(() => {
+                             // Enviar email de notificação
+                            const emailData = {
+                                to: 'iebi.intermares@gmail.com',
+                                subject: 'Nova Inscrição - Treinamento Ministério Infantil 2026',
+                                text: `Nova inscrição realizada:
                             
 Nome: ${formData.nome}
 Idade: ${formData.idade}
@@ -340,13 +355,14 @@ Celular: ${formData.celularResponsavel}
 Faz parte do ministério? ${formData.fazParteMinisterio}
 Salinha: ${formData.qualSalinha}
 Data de Registro: ${formData.dtRegistro}`
-                        };
+                            };
 
-                        // Aqui você pode implementar o envio do email usando um serviço como EmailJS
-                        console.log('Email a ser enviado:', emailData);
-                        
-                        window.location.href = 'obrigado.html';
-                        this.reset();
+                            // Aqui você pode implementar o envio do email usando um serviço como EmailJS
+                            console.log('Email a ser enviado:', emailData);
+                            
+                            window.location.href = 'obrigado.html';
+                            this.reset();
+                        });
                     })
                     .catch((error) => {
                         console.error("Erro ao adicionar documento: ", error);

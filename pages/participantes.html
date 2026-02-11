@@ -553,8 +553,19 @@
             }
 
             if (confirm("Tem certeza que deseja excluir este participante? Esta ação não pode ser desfeita.")) {
+                // 1. Excluir o participante
                 db.collection("Eventos").doc("TreinamentoMI2026").collection("inscricoes").doc(participanteId)
                     .delete()
+                    .then(() => {
+                        // 2. Decrementar o contador
+                        const eventoRef = db.collection("Eventos").doc("TreinamentoMI2026");
+                        return eventoRef.update({
+                            "contador.totalInscricoes": firebase.firestore.FieldValue.increment(-1),
+                            "ultimaAtualizacao": firebase.firestore.FieldValue.serverTimestamp()
+                        }).catch(err => {
+                            console.error("Erro ao atualizar contador na exclusão: ", err);
+                        });
+                    })
                     .then(() => {
                         alert("Participante excluído com sucesso!");
                         $('#participanteModal').modal('hide');
@@ -566,9 +577,6 @@
                         alert("Erro ao excluir participante: " + error.message);
                     });
             }
-
-            carregarParticipantes(); // Recarrega a lista após exclusão
-
         }
 
         // Função para criar gráfico de faixa etária/salinha
